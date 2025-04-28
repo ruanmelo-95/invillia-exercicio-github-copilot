@@ -43,36 +43,66 @@ activities = {
         "description": "Join the school soccer team and compete in matches",
         "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
         "max_participants": 22,
-        "participants": ["lucas@mergington.edu", "mia@mergington.edu"]
+        "participants": ["alex@mergington.edu", "mia@mergington.edu"]
     },
     "Basketball Team": {
         "description": "Practice basketball and participate in tournaments",
         "schedule": "Wednesdays and Fridays, 3:00 PM - 4:30 PM",
         "max_participants": 15,
-        "participants": ["ethan@mergington.edu", "ava@mergington.edu"]
+        "participants": ["liam@mergington.edu", "noah@mergington.edu"]
     },
     "Art Club": {
         "description": "Explore your creativity through painting and drawing",
         "schedule": "Mondays, 3:30 PM - 5:00 PM",
         "max_participants": 15,
-        "participants": ["amelia@mergington.edu", "jackson@mergington.edu"]
+        "participants": ["ava@mergington.edu", "isabella@mergington.edu"]
     },
     "Drama Club": {
-        "description": "Act, direct, and produce plays and performances",
+        "description": "Learn acting skills and perform in school plays",
         "schedule": "Thursdays, 4:00 PM - 5:30 PM",
         "max_participants": 20,
-        "participants": ["isabella@mergington.edu", "logan@mergington.edu"]
+        "participants": ["sophia@mergington.edu", "amelia@mergington.edu"]
     },
     "Math Club": {
         "description": "Solve challenging math problems and prepare for competitions",
         "schedule": "Wednesdays, 3:30 PM - 4:30 PM",
         "max_participants": 10,
-        "participants": ["elijah@mergington.edu", "harper@mergington.edu"]
+        "participants": ["lucas@mergington.edu", "ella@mergington.edu"]
     },
-    "Science Club": {
-        "description": "Conduct experiments and explore scientific concepts",
-        "schedule": "Fridays, 4:00 PM - 5:00 PM",
+    "Debate Team": {
+        "description": "Develop public speaking and argumentation skills",
+        "schedule": "Fridays, 4:00 PM - 5:30 PM",
         "max_participants": 12,
-        "participants": ["grace@mergington.edu", "henry@mergington.edu"]
+        "participants": ["harper@mergington.edu", "jackson@mergington.edu"]
     }
 }
+
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/static/index.html")
+
+
+@app.get("/activities")
+def get_activities():
+    return activities
+
+
+@app.post("/activities/{activity_name}/signup")
+def signup_for_activity(activity_name: str, email: str):
+    """Sign up a student for an activity"""
+    # Validate activity exists
+    if activity_name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+
+    # Get the specificy activity
+    activity = activities[activity_name]
+
+
+    # Add student
+    activity["participants"].append(email)
+    return {"message": f"Signed up {email} for {activity_name}"}
+
+# Validar se o aluno já está inscrito
+if email in activity["participants"]:
+    raise HTTPException(status_code=400, detail="Already signed up")
